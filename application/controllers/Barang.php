@@ -50,6 +50,7 @@ class Barang extends CI_Controller {
 		$arr_input = array(
 			'nama_barang' => $this->input->post('nama_barang'),
 			'deskripsi' => $this->input->post('deskripsi'),
+			'stok' => $this->input->post('stok'),
 		);
 
 		$this->Barang_model->insert_data($arr_input);
@@ -88,6 +89,7 @@ class Barang extends CI_Controller {
 		$arr_input = array(
 			'nama_barang' => $this->input->post('nama_barang'),
 			'deskripsi' => $this->input->post('deskripsi'),
+			'stok' => $this->input->post('stok')
 		);
 
 		$this->Barang_model->update_data($id_barang, $arr_input);
