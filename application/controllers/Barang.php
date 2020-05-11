@@ -123,4 +123,55 @@ class Barang extends CI_Controller {
 
 		echo json_encode($data_output);
 	}
+
+	public function soft_delete_data()
+	{
+		$this->db->trans_start();
+
+		$id_barang = $this->input->get('id_barang');
+
+		$this->Barang_model->soft_delete_data($id_barang);
+
+		if ($this->db->trans_status() === FALSE ) {
+			$this->db->trans_rollback();
+			$data_output = array('sukses' => 'tidak', 'pesan' => 'Gagal Hapus Data Barang');
+		} else {
+			$this->db->trans_commit();
+			$data_output = array('sukses' => 'ya', 'pesan' => 'Berhasil Hapus Data Barang');
+		}
+
+		echo json_encode($data_output);
+
+	}
+
+	public function cari_barang()
+	{
+		$cari_nama = $this->input->post('cari_nama');
+		$cari_deskripsi = $this->input->post('cari_desk');
+		$cari_stok = $this->input->post('cari_stok');
+
+		$data_barang = $this->Barang_model->get_barang($cari_nama, $cari_deskripsi, $cari_stok);
+
+		$konten = '<tr>
+			<td>Nama</td>
+			<td>Deskripsi</td>
+			<td>Stok</td>
+			<td>Aksi</td>
+		</tr>';
+
+		foreach ($data_barang->result() as $key => $value) {
+			$konten .= '<tr>
+							<td>'.$value->nama_barang.'</td>
+							<td>'.$value->deskripsi.'</td>
+							<td>'.$value->stok.'</td>
+							<td>Read | <a href="#'.$value->id_barang.'" class="linkHapusBarang">Hapus</a> | <a href="#'.$value->id_barang.'" class="linkEditBarang">Edit</a>
+							</td>
+						</tr>';
+		}
+
+		$data_json = array (
+			'konten' => $konten,
+		);
+		echo json_encode($data_json);
+	}
 }
