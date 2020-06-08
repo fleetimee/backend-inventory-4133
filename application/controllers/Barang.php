@@ -60,6 +60,7 @@ class Barang extends CI_Controller {
 			<td>Nama</td>
 			<td>Deskripsi</td>
 			<td>Stok</td>
+			<td>Foto</td>
 			<td>Aksi</td>
 		</tr>';
 
@@ -203,6 +204,7 @@ class Barang extends CI_Controller {
 			<td>Nama</td>
 			<td>Deskripsi</td>
 			<td>Stok</td>
+			<td>Foto</td>
 			<td>Aksi</td>
 		</tr>';
 
@@ -211,6 +213,7 @@ class Barang extends CI_Controller {
 							<td>'.$value->nama_barang.'</td>
 							<td>'.$value->deskripsi.'</td>
 							<td>'.$value->stok.'</td>
+							<td><img src="'.base_url().'foto/'.$value->id_barang.'/'.$value->foto_produk.'"width="50"></td>
 							<td>Read | <a href="#'.$value->id_barang.'" class="linkHapusBarang">Hapus</a> | <a href="#'.$value->id_barang.'" class="linkEditBarang">Edit</a>
 							</td>
 						</tr>';
