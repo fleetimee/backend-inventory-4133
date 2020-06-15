@@ -56,13 +56,16 @@ class Barang extends CI_Controller {
 		$data_barang = $this->Barang_model->get_barang();
 
 
-		$konten = '<tr>
-			<td>Nama</td>
-			<td>Deskripsi</td>
-			<td>Stok</td>
-			<td>Foto</td>
-			<td>Aksi</td>
-		</tr>';
+		$konten = '
+		<thead>
+			<tr>
+				<td>Nama</td>
+				<td>Deskripsi</td>
+				<td>Stok</td>
+				<td>Foto</td>
+				<td>Aksi</td>
+			</tr>
+		</thead>';
 
 		foreach ($data_barang->result() as $key => $value) {
 			$konten .= '<tr>
@@ -222,6 +225,52 @@ class Barang extends CI_Controller {
 		$data_json = array (
 			'konten' => $konten,
 		);
+		echo json_encode($data_json);
+	}
+
+	public function list_barang_ajax() 
+	{
+		$limit = $this->input->get('length');
+		$offset = $this->input->get('start');
+		$orderby = $this->input->get('order[0][column]');
+		$method = $this->input->get('order[0][dir]');
+
+		if ($orderby == 0) {
+			$orderby = 'nama barang';
+		} elseif ($orderby == 1) {
+			$orderby = 'deskripsi';
+		} elseif ($orderby == 2) {
+			$orderby = 'stok';
+		} elseif ($orderby == 3) {
+			$orderby = 'foto_produk';
+		} else {
+			$orderby = 'nama_barang';
+		}
+
+		$data_barang = $this->Barang_model->get_barang_ajax($limit, $offset, $orderby, $method);
+
+		$draw = (int) $this->input->get('draw');
+		$recordTotal = $this->Barang_model->get_barang()->num_rows();
+		$recordFiltered = $recordTotal;
+		$data = array();
+
+		foreach ($data_barang->result() as $key => $value ) {
+			$row = array();
+			$row[] = $value->nama_barang;
+			$row[] = $value->deskripsi;
+			$row[] = $value->stok;
+			$row[] = '<img src="'.base_url().'/foto/'.$value->id_barang.'/'.$value->foto_produk.'" width="50">';
+			$row[] = 'Read | <a href="#'.$value->id_barang.'" class="linkHapusBarang">Hapus</a> | <a href="#'.$value->id_barang.'" class="linkEditBarang" >Edit</a>';
+			$data = $row;
+		}
+
+		$data_json = array(
+			'draw' => $draw,
+			'recordTotal' => $recordTotal,
+			'recordFiltered' => $recordFiltered,
+			'data' => $data,
+		);
+
 		echo json_encode($data_json);
 	}
 
