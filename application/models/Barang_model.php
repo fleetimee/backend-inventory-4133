@@ -58,16 +58,4 @@ class Barang_model extends CI_Model {
 		$this->db->where('id_barang', $id_barang);
 		$this->db->update('barang', $data);
 	}
-
-	public function get_barang_ajax($limit, $offset, $orderby, $method)
-	{
-		$this->db->select('*');
-		$this->db->from('barang');
-		$this->db->where('status_delete', 0);
-		if ($limit > -1) {
-			$this->db->limit($limit, $offset);
-		}
-		$this->db->order_by($orderby, $method);
-		return $this->db->get();
-	}
 }
